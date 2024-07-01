@@ -1,62 +1,27 @@
-import express from 'express';
 import AppController from '../controllers/AppController';
 import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FilesController from '../controllers/FilesController';
 
-const router = express.Router();
+const express = require('express');
+// all endpoints of our API
+const router = (app) => {
+  const route = express.Router();
+  app.use(express.json());
+  app.use('/', route);
 
-const routeController = (app) => {
-  app.use('/', router);
-
-  // App Controller
-  router.get('/status', (req, res) => {
-    AppController.getStatus(req, res);
-  });
-
-  router.get('/stats', (req, res) => {
-    AppController.getStats(req, res);
-  });
-
-  router.post('/users', (req, res) => {
-    UsersController.postNew(req, res);
-  });
-
-  router.get('/connect', (req, res) => {
-    AuthController.getConnect(req, res);
-  });
-
-  router.get('/disconnect', (req, res) => {
-    AuthController.getDisconnect(req, res);
-  });
-
-  router.get('/users/me', (req, res) => {
-    UsersController.getMe(req, res);
-  });
-
-  router.post('/files', (req, res) => {
-    FilesController.postUpload(req, res);
-  });
-
-  router.get('/files/:id', (req, res) => {
-    FilesController.getShow(req, res);
-  });
-
-  router.get('/files', (req, res) => {
-    FilesController.getIndex(req, res);
-  });
-
-  router.put('/files/:id/publish', (req, res) => {
-    FilesController.putPublish(req, res);
-  });
-
-  router.put('/files/:id/unpublish', (req, res) => {
-    FilesController.putUnpublish(req, res);
-  });
-
-  router.post('/files/:id/data', (req, res) => {
-    FilesController.getFile(req, res);
-  });
+  route.get('/status', (request, response) => AppController.getStatus(request, response));
+  route.get('/stats', (request, response) => AppController.getStats(request, response));
+  route.post('/users', (request, response) => UsersController.postNew(request, response));
+  route.get('/connect', (request, response) => AuthController.getConnect(request, response));
+  route.get('/disconnect', (request, response) => AuthController.getDisconnect(request, response));
+  route.get('/users/me', (request, response) => UsersController.getMe(request, response));
+  route.post('/files', (request, response) => FilesController.postUpload(request, response));
+  route.get('/files/:id', (request, response) => FilesController.getShow(request, response));
+  route.get('/files', (request, response) => FilesController.getIndex(request, response));
+  route.put('/files/:id/publish', (request, response) => FilesController.putPublish(request, response));
+  route.put('/files/:id/unpublish', (request, response) => FilesController.putUnpublish(request, response));
+  route.get('/files/:id/data', (request, response) => FilesController.getFile(request, response));
 };
 
-export default routeController;
+export default router;
